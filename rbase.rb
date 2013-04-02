@@ -5,7 +5,7 @@ class Table < Hash
 
   def initialize(name, attributes, index=-1)
     @name = name
-    @attributes = attributes
+    @attrbutes = attributes
     @index = index # self-incrementing serial number for id
   end
 
