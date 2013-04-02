@@ -2,6 +2,18 @@ rbase
 =====
 *rbase* is a simple, minimalist, pure-Ruby noSQL database. The whole database is in memory, stored in tables made from Arrays and rows made from Structs that are defined by the user. The database can be persisted to disk through a manual persistence call (otherwise it will remain only in memory).
 
+NOTE
+----
+
+This is a coding practice and is not meant for production.
+Current known issues are:
+* Performance
+* Does not test for edge cases
+* **Will** break under concurrent access
+* Persistence not tested
+
+Use only as project.
+
 Features
 ========
 

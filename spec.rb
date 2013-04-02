@@ -4,11 +4,11 @@ require 'minitest/spec'
 require 'rack/test'
 require 'bundler'
 Bundler.require
+
+FileUtils.rm('./rbase.index', force: true)
 require './rbase'
 
 include Rack::Test::Methods
-
-FileUtils.rm('./rbase.index', force: true)
 
 def app
   Sinatra::Application
