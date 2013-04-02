@@ -1,9 +1,9 @@
 require 'date'
 
-class Table < Array
+class Table < Hash
   attr :name, :attributes, :index
 
-  def initialize(name, attributes, index = -1)
+  def initialize(name, attributes, index=-1)
     @name = name
     @attributes = attributes
     @index = index # self-incrementing serial number for id
@@ -18,30 +18,33 @@ class Table < Array
     value = to_type.call(val)
 
     case op
-      when 'is'   then self.compact.keep_if {|row| row[attribute] == val}
-      when 'not'  then self.compact.keep_if {|row| row[attribute] != val}
-      when 'gt'   then self.compact.keep_if {|row| to_type.call(row[attribute]) > value}
-      when 'lt'   then self.compact.keep_if {|row| to_type.call(row[attribute]) < value}
-      when 'like' then self.compact.keep_if {|row| row[attribute].include?(val)}
+      when 'is'   then self.values.keep_if {|row| row[attribute] == val}
+      when 'not'  then self.values.keep_if {|row| row[attribute] != val}
+      when 'gt'   then self.values.keep_if {|row| to_type.call(row[attribute]) > value}
+      when 'lt'   then self.values.keep_if {|row| to_type.call(row[attribute]) < value}
+      when 'like' then self.values.keep_if {|row| row[attribute].include?(val)}
     end
   end
 
   def insert(row)
     @index += 1
-    self[@index] = row.merge("id" => @index.to_s)
+    id = @index.to_s
+    self.merge!({id => row.merge({'id' => id})})
     @index
   end
 
   def destroy(index)
-    self[index.to_i] = nil
+    self.delete(index)
   end
 
   def get(index)
-    self[index.to_i]
+    self.fetch(index)
+  rescue
+    raise "Row not found"
   end
 
   def persist(f)
-    f.puts({name: name, attributes: attributes, index: index}.to.json)
+    f.puts({name: name, attributes: attributes, index: index}.to_json)
     f.puts(self.count.to_s)
     self.each do |row|
       f.puts(row.to_json)
