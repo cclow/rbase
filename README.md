@@ -12,7 +12,7 @@ Current known issues are:
 * **Will** break under concurrent access
 * Persistence not tested
 
-Use only as project.
+Use only as learning project.
 
 Features
 ========
